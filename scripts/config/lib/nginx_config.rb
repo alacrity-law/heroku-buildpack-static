@@ -9,7 +9,7 @@ class NginxConfig
     clean_urls: false,
     https_only: false,
     worker_connections: 512,
-    resolver: "8.8.8.8",
+    resolver: "1.1.1.1",
     logging: {
       "access" => true,
       "error" => "error"
@@ -59,15 +59,7 @@ class NginxConfig
     logging = json["logging"] || {}
     json["logging"] = DEFAULT[:logging].merge(logging)
 
-    nameservers = []
-    if File.exist?("/etc/resolv.conf")
-      File.open("/etc/resolv.conf", "r").each do |line|
-        next unless md = line.match(/^nameserver\s*(\S*)/)
-        nameservers << md[1]
-      end
-    end
-    nameservers << [DEFAULT[:resolver]] unless nameservers.empty?
-    json["resolver"] = nameservers.join(" ")
+    json["resolver"] ||= [DEFAULT[:resolver]]
 
     json.each do |key, value|
       self.class.send(:define_method, key) { value }
