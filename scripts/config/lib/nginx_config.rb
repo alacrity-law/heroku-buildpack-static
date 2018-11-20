@@ -9,7 +9,7 @@ class NginxConfig
     clean_urls: false,
     https_only: false,
     worker_connections: 512,
-    resolver: "8.8.8.8",
+    resolver: "1.1.1.1",
     logging: {
       "access" => true,
       "error" => "error"
